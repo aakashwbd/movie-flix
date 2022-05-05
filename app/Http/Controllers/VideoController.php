@@ -5,20 +5,18 @@ namespace App\Http\Controllers;
 use App\Models\User;
 use App\Models\Video;
 use Illuminate\Http\Request;
+use Yajra\DataTables\Facades\DataTables;
 
 class VideoController extends Controller
 {
-    public function __construct()
-    {
-        $this->middleware(['auth:sanctum'], ['only' => ['store']]);
-    }
+
     public function store (Request $request){
 
         try {
             $video = new Video();
-            $video->user_id = auth()->id();
             $video->video = $request->video;
-            $video->privacy = $request->privacy;
+            $video->title = $request->title;
+            $video->category_id = $request->category_id;
 
 
             if ($video->save()){
@@ -65,11 +63,6 @@ class VideoController extends Controller
         try {
             $video = new Video();
             $video->rating = $request->id;
-
-
-
-
-
             if ($video->save()){
                 return response([
                     "status" => "success",
@@ -88,7 +81,20 @@ class VideoController extends Controller
 
     public function index (Request $request){
         try {
-            $video = Video::latest()->get();
+            $video = Video::with('category')
+            ->latest()->get();
+
+            if ($request->ajax()) {
+                return Datatables::of($video)
+                    ->addIndexColumn()
+                    ->addColumn('action', function($row){
+                        $button = '<button class="btn btn-primary rounded-0 text-capitalize" data-id="'.$row->id.'" onclick="videoEditHandler('.$row->id.')">Edit</button>';
+                        $button = $button. '<button class="btn btn-outline-primary rounded-0 text-capitalize ms-3" data-id="'.$row->id.'" onclick="categoryDeleteHandler('.$row->id.')">Delete</button>';
+                        return $button;
+                    })
+                    ->rawColumns(['action'])
+                    ->make(true);
+            }
 
             return response([
                 "status" => "success",
@@ -106,12 +112,34 @@ class VideoController extends Controller
 
     public function getSingle ($id){
         try {
-            $video = Video::where('id', $id)->first();
+            $video = Video::with('category')
+            ->where('id', $id)->first();
 
             return response([
                 "status" => "success",
                 "data" => $video
             ]);
+
+
+        }catch (\Exception $e){
+            return response([
+                'status' => 'serverError',
+                'message' => $e->getMessage(),
+            ], 500);
+        }
+    }
+
+    public function delete ($id){
+        try {
+            $video = Video::where('id', $id)->delete();
+            if($video){
+                return response([
+                    "status" => "success",
+                    "message" => 'Video Delete Successfully Done'
+                ]);
+            }
+
+
 
 
         }catch (\Exception $e){

@@ -27,7 +27,7 @@
                 </li>
 
                 <li>
-                    <a class="dropdown-item primary-color" href="#" id="adminLogOut">
+                    <a class="dropdown-item primary-color" href="javascript:void(0);" id="adminLogOut" onclick="signOut()">
                         <span class="iconify" data-icon="ant-design:logout-outlined" data-width="20"
                               data-height="20"></span>
                         Logout

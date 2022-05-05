@@ -6,7 +6,7 @@
                 <div class="card-body p-4">
                     <div class="text-center mb-3">
                         <h4>Login</h4>
-                        <span>Lorem ipsum dolor sit amet, consectetur adipisicing elit. hi</span>
+                        <span></span>
                     </div>
 
                     <form action="{{url('/api/auth/login')}}" id="adminLoginForm">

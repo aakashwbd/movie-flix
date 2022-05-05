@@ -51,6 +51,7 @@ Route::prefix('admin')->group(function () {
     Route::view('/notification', 'admin.notification.index');
     Route::view('/video', 'admin.video.index');
     Route::view('/flash', 'admin.flash.index');
+    Route::view('/report', 'admin.report.index');
 
     Route::prefix('auth')->group(function () {
         Route::view('/login', 'admin.auth.login');

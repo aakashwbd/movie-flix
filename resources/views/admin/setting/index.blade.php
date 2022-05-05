@@ -24,27 +24,30 @@
                     </div>
 
                     <div class="col-lg-6 col-sm-12 col-12 mb-3">
-                        <label for="logo" class="form-label">Logo *</label>
-                        <input type="file" id="logo-uploader" hidden onchange="uploader(event, '','','logo')"/>
+                        <label for="logo" class="form-label">Logo</label>
+                        <input type="file" id="logo-uploader" hidden onchange="logoUploader(event)"/>
                         <input type="hidden" id="logo" name="image[logo]">
-                        <label for="logo-uploader"
+                        <label for="logo-uploader" id="logo-uploader"
                                class="border-dashed cursor-pointer text-black-50 py-2 rounded text-uppercase d-flex align-items-center">
                                     <span class="iconify mx-3" data-icon="fluent:add-12-filled" data-width="20"
                                           data-height="20"></span>
                             upload logo
                         </label>
+                        <img style="width: 100%; height: 200px;" id="logoImgPreview" class="d-none" src="" alt="">
                     </div>
 
                     <div class="col-lg-6 col-sm-12 col-12 mb-3">
                         <label for="logo-icon" class="form-label">Logo Icon *</label>
-                        <input type="file" id="logo-icon-uploader" hidden onchange="uploader(event,'','','logo-icon')"/>
-                        <input type="hidden" id="logo-icon" name="image[logo-icon]">
+                        <input type="file" id="logo-icon-uploader" hidden onchange="iconUploader(event)"/>
+                        <input type="hidden" id="logo-icon" name="image[logo_icon]">
                         <label for="logo-icon-uploader"
                                class="border-dashed cursor-pointer text-black-50 py-2 rounded text-uppercase d-flex align-items-center">
                                     <span class="iconify mx-3" data-icon="fluent:add-12-filled" data-width="20"
                                           data-height="20"></span>
                             upload logo icon
                         </label>
+
+                        <img style="width: 100%; height: 200px;" id="logoIconImgPreview" class="d-none" src="" alt="">
                     </div>
 
                     <div class="col-lg-6 col-sm-12 col-12 mb-3">
@@ -191,32 +194,72 @@
 
 
 
-{{--    <div class="modal fade" id="socialModal" data-bs-keyboard="false" tabindex="-1">--}}
-{{--        <div class="modal-dialog modal-dialog-centered modal-dialog-scrollable">--}}
-{{--            <div class="modal-content">--}}
-{{--                <div class="modal-header justify-content-center">--}}
-{{--                    <h6 class="text-capitalize">Add More Social Account</h6>--}}
-{{--                </div>--}}
-{{--                <div class="modal-body">--}}
-{{--                    <form action="{{url('api/forgot-password')}}" id="moreSocialForm">--}}
-{{--                        <div class="form-group">--}}
-{{--                            <input type="text" name="emailorphone" id="emailorphone"--}}
-{{--                                   class="form-control email phone" placeholder="Email or Phone">--}}
-{{--                            <span class="text-danger phone_error email_error" id="emailorphone_error"></span>--}}
-{{--                        </div>--}}
-{{--                        <div class="text-center my-3">--}}
-{{--                            <button type="submit" class="btn btn-primary form-control">Submit</button>--}}
-{{--                        </div>--}}
-{{--                    </form>--}}
-{{--                    --}}
-{{--                </div>--}}
-{{--            </div>--}}
-{{--        </div>--}}
-{{--    </div>--}}
 @endsection
 
 @push('custom-js')
     <script>
+        function logoUploader (event) {
+            event.preventDefault();
+            let file = event.target.files[0];
+            let formData = new FormData()
+            formData.append('file', file);
+            formData.append('folder', 'blog');
+
+            let showURL = window.origin + '/api/image-uploader';
+            $.ajax({
+                url: showURL,
+                type: 'POST',
+                dataType: "json",
+                processData: false,
+                contentType: false,
+                headers: {
+                    'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content'),
+                },
+                data: formData,
+                success: function (res) {
+                    if(res.status === 'success'){
+                        toastr.success(res.message)
+                        $('#logo-uploader').text('change logo image')
+                        $('#logoImgPreview').removeClass('d-none').attr('src', res.data)
+                        $('#logo').val(res.data)
+                    }
+                }, error: function (jqXhr, ajaxOptions, thrownError) {
+                    console.log(jqXhr)
+                }
+            });
+        }
+
+        function iconUploader (event) {
+            event.preventDefault();
+            let file = event.target.files[0];
+            let formData = new FormData()
+            formData.append('file', file);
+            formData.append('folder', 'blog');
+
+            let showURL = window.origin + '/api/image-uploader';
+            $.ajax({
+                url: showURL,
+                type: 'POST',
+                dataType: "json",
+                processData: false,
+                contentType: false,
+                headers: {
+                    'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content'),
+                },
+                data: formData,
+                success: function (res) {
+                    if(res.status === 'success'){
+                        toastr.success(res.message)
+                        $('#logo-uploader').text('change logo image')
+                        $('#logoIconImgPreview').removeClass('d-none').attr('src', res.data)
+                        $('#logo-icon').val(res.data)
+                    }
+                }, error: function (jqXhr, ajaxOptions, thrownError) {
+                    console.log(jqXhr)
+                }
+            });
+        }
+
         $(document).on('click', '#addPartnerBtn', function (e){
             e.preventDefault();
             $('#partnerInputList').append(`
@@ -257,7 +300,30 @@
         $('#settingForm').submit(function (e) {
             e.preventDefault();
             let form = $(this);
-            formSubmit("post", form);
+            let form_data = JSON.stringify(form.serializeJSON());
+            let formData = JSON.parse(form_data)
+
+            let url = form.attr('action');
+
+            $.ajax({
+                type: "post",
+                url: url,
+                data: formData,
+                headers: {
+                    'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content'),
+                },
+                success: function (response) {
+                    toastr.success(response.message)
+
+                    setTimeout(function () {
+                        location.reload();
+                    }, 1000);
+
+                }, error: function (xhr, resp, text) {
+
+                    console.log(xhr && xhr.responseJSON)
+                }
+            });
         })
 
         $(document).ready(function (){
@@ -291,6 +357,11 @@
                                         let id = item[0].replace(/["']/g, "")
                                         $('#' + id).val(item[1]);
                                     })
+                                }
+                                if(value[0] === 'image'){
+                                    $('#logoImgPreview').removeClass('d-none').attr('src', value[1].logo)
+                                    $('#logoIconImgPreview').removeClass('d-none').attr('src', value[1].logo_icon)
+
                                 }
 
                                 if(value[0] === 'partner_site'){

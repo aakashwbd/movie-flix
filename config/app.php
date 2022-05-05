@@ -197,6 +197,7 @@
              'DataTables' => Yajra\DataTables\Facades\DataTables::class,
              'Socialite' => Laravel\Socialite\Facades\Socialite::class,
             'Share' => Jorenvh\Share\ShareFacade::class,
+
         ])->toArray(),
 
     ];

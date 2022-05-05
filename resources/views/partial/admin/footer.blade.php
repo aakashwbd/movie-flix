@@ -10,7 +10,7 @@
 <script src="https://unpkg.com/swiper/swiper-bundle.min.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery-confirm/3.3.2/jquery-confirm.min.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery.serializeJSON/3.2.1/jquery.serializejson.min.js"></script>
-
+<script src="//cdn.jsdelivr.net/npm/sweetalert2@11"></script>
 {{--<script src="{{asset('js/app.js')}}"></script>--}}
 <script src="{{asset('js/main.js')}}"></script>
 
@@ -25,9 +25,18 @@
 
     function authRestrictionHandler (){
         if(!constant.token){
-            location.href = constant.loginURL
+            window.location.replace(constant.loginURL);
         }
     }
+
+    function signOut(){
+        // alert(constant.getAdmin)
+        localStorage.removeItem('adminAccess');
+        localStorage.removeItem('adminInfo');
+        window.location.replace(constant.loginURL);
+    }
+
+
     $(document).ready(function (){
         if(constant.getAdmin){
             $('#adminImage').attr('src', constant.getAdmin.image)

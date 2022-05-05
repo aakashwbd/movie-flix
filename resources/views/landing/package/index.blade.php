@@ -349,18 +349,13 @@
 
 
         const paypalButtonsComponent = paypal.Buttons({
-            // optional styling for buttons
-            // https://developer.paypal.com/docs/checkout/standard/customize/buttons-style-guide/
             style: {
                 color: "gold",
                 shape: "rect",
                 layout: "vertical"
             },
 
-            // set up the transaction
             createOrder: (data, actions) => {
-                // pass in any options from the v2 orders create call:
-                // https://developer.paypal.com/api/orders/v2/#orders-create-request-body
                 const createOrderPayload = {
                     intent: "CAPTURE",
                     purchase_units: [
@@ -372,72 +367,15 @@
 
                         }
                     ],
-
-
-                    // payment_source: {
-                    //     "apple_pay": {
-                    //         "id": "DSF32432423FSDFS",
-                    //         "name": "Randy Oscar",
-                    //         "email_address": "randy.oscar@gmail.com",
-                    //         "phone_number": {
-                    //             "country_code": "1",
-                    //             "national_number": "18882211161"
-                    //         },
-                    //         "shipping": {
-                    //             "name": {
-                    //                 "given_name": "Randy",
-                    //                 "surname": "Oscar"
-                    //             },
-                    //             "email_address": "randy.oscar@gmail.com",
-                    //             "address": {
-                    //                 "address_line_1": "123 Townsend S",
-                    //                 "address_line_2": "Floor 6",
-                    //                 "admin_area_2": "San Francisc",
-                    //                 "admin_area_1": "CA",
-                    //                 "postal_code": "94107",
-                    //                 "country_code": "US"
-                    //             }
-                    //         },
-                    //         "decrypted_token": {
-                    //             "transaction_amount": {
-                    //                 "currency_code": "USD",
-                    //                 "value": "10.00"
-                    //             },
-                    //             "tokenized_card": {
-                    //                 "number": "4111111111114672",
-                    //                 "expiry": "2022-02",
-                    //                 "billing_address": {
-                    //                     "address_line_1": "123 Townsend S",
-                    //                     "address_line_2": "Floor 6",
-                    //                     "admin_area_2": "San Francisc",
-                    //                     "admin_area_1": "CA",
-                    //                     "postal_code": "94107",
-                    //                     "country_code": "US"
-                    //                 }
-                    //             },
-                    //             "device_manufacturer_id": "040010030273",
-                    //             "payment_data_type": "3DSECURE",
-                    //             "payment_data": {
-                    //                 "cryptogram": "SaDA0Gw9cR37j8xrZP6VFCJpa",
-                    //                 "eci_indicator": "7"
-                    //             }
-                    //         }
-                    //     }
-                    // }
-
                 };
 
                 return actions.order.create(createOrderPayload);
             },
 
-            // finalize the transaction
             onApprove: (data, actions) => {
                 const captureOrderHandler = (details) => {
                     let token = localStorage.getItem('accessToken')
-                    var list = JSON.parse(localStorage.getItem('package'))
-                    console.log('priceList', list)
-
-
+                    let list = JSON.parse(localStorage.getItem('package'))
                     $.ajax({
                         url: window.origin + '/api/checkout',
                         type: 'POST',
@@ -452,20 +390,9 @@
                             console.log(jqXhr)
                         }
                     });
-                    // const payerID = details.payer.id
-                    // const payerEmail =details.payer.email
-                    // const payerName = details.payer.name
-
-                    console.log('Transaction completed', details);
                 };
-
-                console.log(data)
-
-
                 return actions.order.capture().then(captureOrderHandler);
             },
-
-            // handle unrecoverable errors
             onError: (err) => {
                 console.error('An error prevented the buyer from checking out with PayPal');
             }

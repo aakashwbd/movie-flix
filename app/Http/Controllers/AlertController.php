@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Models\Alert;
 use Illuminate\Http\Request;
+use Yajra\DataTables\Facades\DataTables;
 
 class AlertController extends Controller
 {
@@ -23,6 +24,37 @@ class AlertController extends Controller
                 return response([
                                     "status" => "success",
                                     "message" => "Alert Successfully Done"
+                                ]);
+            }
+        }catch (\Exception $e){
+            return response([
+                                'status' => 'serverError',
+                                'message' => $e->getMessage(),
+                            ], 500);
+        }
+
+    }
+
+    public function getAll (Request $request){
+        try {
+            $alert= Alert::with('user')
+            ->get();
+
+            if ($request->ajax()) {
+                return Datatables::of($alert)
+                    ->addIndexColumn()
+                    ->addColumn('action', function($row){
+                        $button = '<button class="btn btn-primary rounded-0 text-capitalize" data-id="'.$row->id.'" onclick="flashEditHandler('.$row->id.')">Edit</button>';
+                        $button = $button. '<button class="btn btn-outline-primary rounded-0 text-capitalize ms-3" data-id="'.$row->id.'" onclick="flashDeleteHandler('.$row->id.')">Delete</button>';
+                        return $button;
+                    })
+                    ->rawColumns(['action'])
+                    ->make(true);
+            }
+            if ($alert){
+                return response([
+                                    "status" => "success",
+                                    "data" => $alert
                                 ]);
             }
         }catch (\Exception $e){

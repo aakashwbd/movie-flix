@@ -30,15 +30,38 @@
             var table = $('.data-table').DataTable({
                 processing: true,
                 serverSide: true,
-                ajax: "{{url('api/admin/user/get-all')}}",
+                ajax: "{{url('api/admin/user/suspend')}}",
                 columns: [
-                    {data: 'name', name: 'name'},
+                    {data: 'username', name: 'username'},
                     {data: 'email', name: 'email'},
                     {data: 'created_at', name: 'created_at'},
                     {data: 'action', name: 'action', orderable: false, searchable: false},
                 ]
             });
         });
+
+        function userHandler(id){
+
+            let form_data = new FormData();
+            form_data.append('status', 'active')
+            $.ajax({
+                url: window.origin + '/api/user/'+id,
+                type: "POST",
+                dataType: "json",
+                processData: false,
+                contentType: false,
+                headers: {
+                    "X-CSRF-TOKEN": $('meta[name="csrf-token"]').attr("content"),
+                },
+                data: form_data,
+                success: function (res) {
+                    toastr.success(res.message)
+                },
+                error: function (jqXhr, ajaxOptions, thrownError) {
+                    console.log(jqXhr);
+                }
+            });
+        }
     </script>
 @endpush
 

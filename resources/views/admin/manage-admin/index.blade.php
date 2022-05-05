@@ -131,7 +131,36 @@
         $('#adminForm').submit(function (e) {
             e.preventDefault();
             let form = $(this);
-            formSubmit("post", form);
+            let form_data = JSON.stringify(form.serializeJSON());
+            let formData = JSON.parse(form_data);
+            let url = form.attr("action");
+            $.ajax({
+                type: 'post',
+                url: url,
+                data: formData,
+                headers: {
+                    "X-CSRF-TOKEN": $('meta[name="csrf-token"]').attr("content"),
+                },
+                success: function (response) {
+                    console.log(response);
+
+
+                },
+                error: function (xhr, resp, text) {
+                    if (xhr && xhr.responseJSON) {
+                        let response = xhr.responseJSON;
+                        if (response.status && response.status === "validate_error") {
+                            $.each(response.message, function (index, message) {
+                                $("." + message.field).addClass("is-invalid");
+                                $("." + message.field + "_label").addClass(
+                                    "text-danger"
+                                );
+                                $("." + message.field + "_error").html(message.error);
+                            });
+                        }
+                    }
+                }
+            });
         })
 
 

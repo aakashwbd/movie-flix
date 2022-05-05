@@ -10,14 +10,14 @@
     use Illuminate\Http\Request;
     use Illuminate\Support\Facades\Cache;
     use Illuminate\Support\Facades\Hash;
-    use Illuminate\Support\Facades\Validator;
-//    use Validator;
+
     use DataTables;
+    use Illuminate\Support\Facades\Validator;
 
     class AuthController extends Controller {
         public function __construct()
         {
-            $this->middleware(['auth:sanctum'], ['only' => ['getAll','index','profileInfo']]);
+            $this->middleware(['auth:sanctum'], ['only' => ['getAll','profileInfo']]);
         }
 
 
@@ -25,6 +25,7 @@
         public function register(Request $request) {
 
             try {
+
                 $validator = Validator::make($request->all(), [
                     "email" => "unique:users|email:rfc,dns",
                     "phone" => "unique:users",
@@ -48,6 +49,10 @@
                 $user->image = $request->image;
                 $user->user_role_id = $request->user_role_id ?? 3;
                 $user->password = Hash::make($request->password);
+
+                if($user->user_role_id === 3){
+                    $user->status = 'pending';
+                }
                 if ($user->save()) {
                     return response([
                                         "status" => "success",
@@ -122,6 +127,30 @@
 
         }
 
+        public function statusUpdate(Request $request, $id) {
+            try {
+                $userData = User::where('id', $id)->first();
+
+                if ($userData) {
+                    $userData->status = $request->status ?? $userData->status;
+                    if ($userData->update()) {
+                        return response([
+                            "status" => "success",
+                            "message" => "User Accept Successfully Complete"
+                        ]);
+                    }
+                }
+
+            } catch (Exception $e) {
+                return response([
+                    'status' => 'serverError',
+                    'message' => $e->getMessage(),
+                ], 500);
+
+            }
+
+        }
+
         public function checkEmail(Request $request) {
 
             try {
@@ -176,24 +205,7 @@
                                         ]);
                     }
                 }
-//                else {
-//                    $profile = new Profile();
-//
-//                    $profile->user_id = auth()->id();
-//                    $profile->username = $request->username;
-//                    $profile->dob = $request->dob;
-//                    $profile->address = $request->address;
-//                    $profile->test = $request->test;
-//                    $profile->preference = $request->preference;
-//                    $profile->presentation = $request->presentation;
-//
-//                    if ($profile->save()) {
-//                        return response([
-//                                            "status" => "success",
-//                                            "message" => "Profile Save Successfully Complete"
-//                                        ]);
-//                    }
-//                }
+
 
             } catch (Exception $e) {
                 return response([
@@ -206,7 +218,6 @@
         }
 
         public function updatePassword(Request $request) {
-//            dd($request->all());
             try {
                 $userData = User::where('phone', $request->phone)
                     ->where('email', $request->email)
@@ -222,8 +233,6 @@
                                         ]);
                     }
                 }
-//
-
             } catch (Exception $e) {
                 return response([
                                     'status' => 'serverError',
@@ -376,13 +385,34 @@
 
 
         public function  index(Request $request){
-              $user = User::latest()->get();
+              $user = User::where('user_role_id', 3)->latest()->get();
             if ($request->ajax()) {
                 return Datatables::of($user)
                     ->addIndexColumn()
                     ->addColumn('action', function($row){
-                        $button = '<button class="btn btn-primary rounded-0 text-capitalize" data-id="'.$row->id.'">delete</button>';
-                        $button = $button. '<button class="btn btn-outline-primary rounded-0 text-capitalize ms-3" data-id="'.$row->id.'">banned</button>';
+                        $button = '<button class="btn btn-primary rounded-0 text-capitalize" data-id="'.$row->id.'" onclick="userHandler('.$row->id.')">Accept</button>';
+                        $button = $button. '<button class="btn btn-outline-primary rounded-0 text-capitalize ms-3" data-id="'.$row->id.'" onclick="userBannedHandler('.$row->id.')">banned</button>';
+                        return $button;
+                    })
+                    ->rawColumns(['action'])
+                    ->make(true);
+            }
+            return response([
+                            "status"=> 'success',
+                                "data"=> $user
+                            ]) ;
+        }
+
+        public function  suspendUser(Request $request){
+              $user = User::where('user_role_id', 3)
+                  ->where('status', 'suspend')
+                  ->latest()
+                  ->get();
+            if ($request->ajax()) {
+                return Datatables::of($user)
+                    ->addIndexColumn()
+                    ->addColumn('action', function($row){
+                        $button = '<button class="btn btn-primary rounded-0 text-capitalize" data-id="'.$row->id.'" onclick="userHandler('.$row->id.')">Accept</button>';
                         return $button;
                     })
                     ->rawColumns(['action'])

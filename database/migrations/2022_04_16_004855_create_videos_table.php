@@ -15,10 +15,9 @@ return new class extends Migration
     {
         Schema::create('videos', function (Blueprint $table) {
             $table->id();
-            $table->bigInteger('user_id');
             $table->string('video')->nullable();
-            $table->string('privacy')->default('public');
-            $table->string('status')->default('active');
+            $table->string('title')->nullable();
+            $table->string('category_id')->nullable();
             $table->timestamps();
         });
     }

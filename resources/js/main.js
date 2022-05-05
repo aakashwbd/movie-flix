@@ -388,11 +388,7 @@ $("#signOut").click(function () {
     location.reload();
     localStorage.removeItem("user");
 });
-$("#adminLogOut").click(function () {
-    localStorage.removeItem("adminAccessToken");
-    localStorage.removeItem("admin");
-    window.location.href = window.origin + "/admin/auth/login";
-});
+
 
 
 uploader = function (

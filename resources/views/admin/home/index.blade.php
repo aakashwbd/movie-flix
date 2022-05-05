@@ -10,81 +10,8 @@
 
             <div class="row my-3 justify-content-between">
                 <div class="col-lg-7 col-sm-12 col-12">
-                    <div class="row">
-                        <div class="col-lg-4 col-sm-12 mb-3">
-                            <div class="card">
-                                <div class="d-flex justify-content-between ">
-                                    <div>
-                                        <h2 class="">0</h2>
-                                        <span class="">Total Category</span>
-                                    </div>
-                                    <div class="count-icon-box d-flex align-items-center justify-content-center">
-                                        <span class="iconify position-center" data-icon="ic:outline-category"
-                                              style="color: #da0f0f;" data-width="30" data-height="30"></span>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
+                    <div class="row" id="total-count-container">
 
-                        <div class="col-lg-4 col-sm-12 mb-3">
-                            <div class="card">
-                                <div class="d-flex justify-content-between ">
-                                    <div>
-                                        <h2 class="">0</h2>
-                                        <span class="">Total Category</span>
-                                    </div>
-                                    <div class="count-icon-box d-flex align-items-center justify-content-center">
-                                        <span class="iconify position-center" data-icon="ic:outline-category"
-                                              style="color: #da0f0f;" data-width="30" data-height="30"></span>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-
-                        <div class="col-lg-4 col-sm-12 mb-3">
-                            <div class="card">
-                                <div class="d-flex justify-content-between ">
-                                    <div>
-                                        <h2 class="">0</h2>
-                                        <span class="">Total Category</span>
-                                    </div>
-                                    <div class="count-icon-box d-flex align-items-center justify-content-center">
-                                        <span class="iconify position-center" data-icon="ic:outline-category"
-                                              style="color: #da0f0f;" data-width="30" data-height="30"></span>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-
-                        <div class="col-lg-4 col-sm-12 mb-3">
-                            <div class="card">
-                                <div class="d-flex justify-content-between ">
-                                    <div>
-                                        <h2 class="">0</h2>
-                                        <span class="">Total Category</span>
-                                    </div>
-                                    <div class="count-icon-box d-flex align-items-center justify-content-center">
-                                        <span class="iconify position-center" data-icon="ic:outline-category"
-                                              style="color: #da0f0f;" data-width="30" data-height="30"></span>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-
-                        <div class="col-lg-4 col-sm-12 mb-3">
-                            <div class="card">
-                                <div class="d-flex justify-content-between ">
-                                    <div>
-                                        <h2 class="">0</h2>
-                                        <span class="">Total Category</span>
-                                    </div>
-                                    <div class="count-icon-box d-flex align-items-center justify-content-center">
-                                        <span class="iconify position-center" data-icon="ic:outline-category"
-                                              style="color: #da0f0f;" data-width="30" data-height="30"></span>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
                     </div>
                 </div>
 
@@ -162,6 +89,44 @@
     <script>
         $(document).ready(function (){
             authRestrictionHandler()
+
+            $.ajax({
+                type: "GET",
+                url: window.origin + '/api/admin/dashboard/total-count',
+                headers: {
+                    'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content'),
+                },
+                success: function (response) {
+                    console.log(response.data)
+                    if(response.status === 'success' && response.data.length > 0){
+
+                        response.data.forEach(item =>{
+                            Object.entries(item).forEach(value => {
+                                console.log(value[0])
+                                $('#total-count-container').append(`
+                                    <div class="col-lg-4 col-sm-12 mb-3">
+                                        <div class="card">
+                                            <div class="d-flex justify-content-between ">
+                                                <div>
+                                                    <h2 class="">${value[1]}</h2>
+                                                    <span class="">Total ${value[0]}</span>
+                                                </div>
+                                                <div class="count-icon-box d-flex align-items-center justify-content-center">
+                                                    <span class="iconify position-center" data-icon="ic:outline-category"
+                                                          style="color: #da0f0f;" data-width="30" data-height="30"></span>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                            `)
+                            })
+
+                        })
+                    }
+                }, error: function (xhr, resp, text) {
+                    console.log(xhr && xhr.responseJSON)
+                }
+            });
         })
     </script>
 @endpush

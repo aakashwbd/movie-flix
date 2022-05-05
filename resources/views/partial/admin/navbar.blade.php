@@ -31,7 +31,7 @@
         <li class="list-item list-heading">Manage</li>
         <li class="list-item  my-3">
             <a href="{{url('/admin/category')}}" class="list-link {{$currentControllerName2 == 'category' || '' ? 'active' : '' }}">
-                <span class="iconify me-2" data-icon="ic:sharp-space-dashboard" data-width="20"
+                <span class="iconify me-2"  data-icon="material-symbols:category-outline" data-width="20"
                       data-height="20"></span>
                 Category
             </a>
@@ -39,7 +39,7 @@
 
         <li class="list-item  my-3">
             <a href="{{url('/admin/blog')}}" class="list-link {{$currentControllerName2 == 'blog' || '' ? 'active' : '' }}">
-                <span class="iconify me-2" data-icon="ic:sharp-space-dashboard" data-width="20"
+                <span class="iconify me-2"  data-icon="fa6-brands:blogger-b" data-width="20"
                       data-height="20"></span>
                 Blog
             </a>
@@ -47,7 +47,7 @@
 
         <li class="list-item  my-3">
             <a href="{{url('/admin/banner-image')}}" class="list-link {{$currentControllerName2 == 'banner-image' || '' ? 'active' : '' }}">
-                <span class="iconify me-2" data-icon="ic:sharp-space-dashboard" data-width="20"
+                <span class="iconify me-2" data-icon="bi:image" data-width="20"
                       data-height="20"></span>
                 Banner Image
             </a>
@@ -55,7 +55,7 @@
 
         <li class="list-item  my-3">
             <a href="{{url('/admin/flash')}}" class="list-link {{$currentControllerName2 == 'flash' || '' ? 'active' : '' }}">
-                <span class="iconify me-2" data-icon="ic:sharp-space-dashboard" data-width="20"
+                <span class="iconify me-2" data-icon="carbon:flash-filled" data-width="20"
                       data-height="20"></span>
                 Flash
             </a>
@@ -63,7 +63,7 @@
 
         <li class="list-item  my-3">
             <a href="{{url('/admin/verification')}}" class="list-link {{$currentControllerName2 == 'verification' || '' ? 'active' : '' }}">
-                <span class="iconify me-2" data-icon="ic:sharp-space-dashboard" data-width="20"
+                <span class="iconify me-2" data-icon="uiw:verification" data-width="20"
                       data-height="20"></span>
                 Verification Requests
             </a>
@@ -71,7 +71,7 @@
 
         <li class="list-item  my-3">
             <a href="{{url('/admin/report')}}" class="list-link {{$currentControllerName2 == 'report' || '' ? 'active' : '' }}">
-                <span class="iconify me-2" data-icon="ic:sharp-space-dashboard" data-width="20"
+                <span class="iconify me-2" data-icon="ic:round-report" data-width="20"
                       data-height="20"></span>
                Reports
             </a>
@@ -95,7 +95,7 @@
 
         <li class="list-item  my-3">
             <a href="{{url('/admin/recent-payment')}}" class="list-link {{$currentControllerName2 == 'recent-payment' || '' ? 'active' : '' }}">
-                <span class="iconify me-2" data-icon="ic:sharp-space-dashboard" data-width="20"
+                <span class="iconify me-2" data-icon="material-symbols:payments-outline-rounded" data-width="20"
                       data-height="20"></span>
                 Recent Payment
             </a>
@@ -103,7 +103,7 @@
 
         <li class="list-item  my-3">
             <a href="{{url('/admin/video')}}" class="list-link {{$currentControllerName2 == 'video' || '' ? 'active' : '' }}">
-                <span class="iconify me-2" data-icon="ic:sharp-space-dashboard" data-width="20"
+                <span class="iconify me-2"  data-icon="bxs:video"  data-width="20"
                       data-height="20"></span>
                 Clean Video
             </a>
@@ -113,7 +113,7 @@
 
         <li class="list-item  my-3">
             <a href="{{url('/admin/manage-admin')}}" class="list-link {{$currentControllerName2 == 'manage-admin' || '' ? 'active' : '' }}">
-                <span class="iconify me-2" data-icon="ic:sharp-space-dashboard" data-width="20"
+                <span class="iconify me-2"  data-icon="clarity:administrator-solid" data-width="20"
                       data-height="20"></span>
                 Manage Admin
             </a>
@@ -122,14 +122,14 @@
         <li class="list-item list-heading">Users</li>
         <li class="list-item  my-3">
             <a href="{{url('/admin/manage-users')}}" class="list-link {{$currentControllerName2 == 'manage-users' || '' ? 'active' : '' }}">
-                <span class="iconify me-2" data-icon="ic:sharp-space-dashboard" data-width="20"
+                <span class="iconify me-2"  data-icon="clarity:administrator-solid" data-width="20"
                       data-height="20"></span>
                 Manage Users
             </a>
         </li>
         <li class="list-item  my-3">
             <a href="{{url('/admin/banned-users')}}" class="list-link {{$currentControllerName2 == 'banned-users' || '' ? 'active' : '' }}">
-                <span class="iconify me-2" data-icon="ic:sharp-space-dashboard" data-width="20"
+                <span class="iconify me-2"  data-icon="clarity:administrator-solid" data-width="20"
                       data-height="20"></span>
                 Banned Users
             </a>
@@ -138,7 +138,7 @@
         <li class="list-item list-heading">Setting</li>
         <li class="list-item  my-3">
             <a href="{{url('/admin/settings')}}" class="list-link {{$currentControllerName2 == 'settings' || '' ? 'active' : '' }}">
-                <span class="iconify me-2" data-icon="ic:sharp-space-dashboard" data-width="20"
+                <span class="iconify me-2" data-icon="ant-design:setting-filled" data-width="20"
                       data-height="20"></span>
                 Basic Setting
             </a>

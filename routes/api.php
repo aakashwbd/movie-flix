@@ -37,6 +37,7 @@ Route::post('user/fetch-all', [AuthController::class, 'getByUnAuth']);
 Route::post('user/send-flash', [\App\Http\Controllers\FlashController::class, 'sendFlash']);
 
 Route::get('user/{id}', [AuthController::class, 'show']);
+Route::post('user/{id}', [AuthController::class, 'statusUpdate']);
 
 Route::post('forgot-password', [AuthController::class, 'checkEmail']);
 Route::post('recover-password', [AuthController::class, 'updatePassword']);
@@ -78,19 +79,31 @@ Route::get('get-message/all', [\App\Http\Controllers\MessengerController::class,
 Route::prefix('admin')->group(function () {
 
     Route::get('/{user_role_id}', [\App\Http\Controllers\AdminController::class, 'index']);
+    Route::get('dashboard/total-count', [\App\Http\Controllers\DashboardCountController::class, 'totalCount']);
 
 
     Route::post('/banner-image/store', [BannerController::class, 'store']);
     Route::get('/banner-image/index', [BannerController::class, 'index']);
-//    Route::get('/banner-image', [AuthController::class, 'index']);
+    Route::delete('/banner-image/{id}', [BannerController::class, 'delete']);
+    Route::patch('/banner-image/{id}', [BannerController::class, 'update']);
+    Route::get('/banner-image/{id}', [BannerController::class, 'getSingle']);
+
 
     Route::get('user/get-all', [AuthController::class, 'index']);
+    Route::get('user/suspend', [AuthController::class, 'suspendUser']);
+
     Route::post('setting/store', [\App\Http\Controllers\SettingController::class, 'store']);
     Route::get('setting/get-all', [\App\Http\Controllers\SettingController::class, 'index']);
+
     Route::post('category/store', [\App\Http\Controllers\CategoryController::class, 'store']);
     Route::get('category/all', [\App\Http\Controllers\CategoryController::class, 'getAll']);
+    Route::delete('category/{id}', [\App\Http\Controllers\CategoryController::class, 'delete']);
+    Route::patch('category/{id}', [\App\Http\Controllers\CategoryController::class, 'update']);
+    Route::get('category/{id}', [\App\Http\Controllers\CategoryController::class, 'getSingle']);
+
     Route::post('invite-code/store', [\App\Http\Controllers\InviteCodeController::class, 'store']);
     Route::post('invite-code/get-all', [\App\Http\Controllers\InviteCodeController::class, 'index']);
+
     Route::post('notification/store', [\App\Http\Controllers\NotificationController::class, 'store']);
 
     Route::get('package', [\App\Http\Controllers\PackageController::class, 'show']);
@@ -100,9 +113,28 @@ Route::prefix('admin')->group(function () {
     Route::post('/blog/store', [\App\Http\Controllers\BlogController::class, 'store']);
     Route::get('/blog/get-all', [\App\Http\Controllers\BlogController::class, 'show']);
     Route::get('/blog/{id}', [\App\Http\Controllers\BlogController::class, 'index']);
+    Route::get('/blog/{id}', [\App\Http\Controllers\BlogController::class, 'getSingleBlog']);
+    Route::delete('/blog/{id}', [\App\Http\Controllers\BlogController::class, 'delete']);
+    Route::patch('/blog/{id}', [\App\Http\Controllers\BlogController::class, 'update']);
 
     Route::post('/flash', [\App\Http\Controllers\FlashController::class, 'store']);
     Route::get('/flash/get', [\App\Http\Controllers\FlashController::class, 'show']);
+    Route::get('flash-list/all-list', [\App\Http\Controllers\FlashController::class, 'allList']);
+    Route::delete('flash-list/{id}', [\App\Http\Controllers\FlashController::class, 'delete']);
+    Route::get('flash-list/{id}', [\App\Http\Controllers\FlashController::class, 'singleShow']);
+    Route::patch('flash-list/{id}', [\App\Http\Controllers\FlashController::class, 'update']);
+
+    Route::get('/payment', [\App\Http\Controllers\FlashController::class, 'show']);
+
+    Route::get('/check-out/all-list', [\App\Http\Controllers\CheckoutController::class, 'getAll']);
+
+    Route::post('video/store', [\App\Http\Controllers\VideoController::class, 'store']);
+    Route::get('video/get-all', [\App\Http\Controllers\VideoController::class, 'index']);
+    Route::get('video/id', [\App\Http\Controllers\VideoController::class, 'update']);
+    Route::delete('video/{id}', [\App\Http\Controllers\VideoController::class, 'delete']);
+    Route::get('video/{id}', [\App\Http\Controllers\VideoController::class, 'getSingle']);
+
+    Route::get('alert/all-list', [\App\Http\Controllers\AlertController::class, 'getAll']);
 
 });
 Route::post('/blog/comment', [\App\Http\Controllers\BlogCommentController::class, 'store']);
@@ -110,10 +142,7 @@ Route::post('file/store', [\App\Http\Controllers\FileController::class, 'store']
 Route::get('file/video', [\App\Http\Controllers\FileController::class, 'getVideo']);
 Route::get('file/video/{id}', [\App\Http\Controllers\FileController::class, 'singleVideo']);
 Route::post('file/video/search', [\App\Http\Controllers\FileController::class, 'search']);
-Route::post('video/store', [\App\Http\Controllers\VideoController::class, 'store']);
-Route::get('video/get-all', [\App\Http\Controllers\VideoController::class, 'index']);
-Route::get('video/id', [\App\Http\Controllers\VideoController::class, 'update']);
-Route::get('video/{id}', [\App\Http\Controllers\VideoController::class, 'getSingle']);
+
 Route::post('video/search', [\App\Http\Controllers\VideoController::class, 'search']);
 Route::post('place/store', [\App\Http\Controllers\AdController::class, 'store']);
 Route::post('place/update', [\App\Http\Controllers\AdController::class, 'update']);
@@ -121,6 +150,7 @@ Route::get('place/get-all', [\App\Http\Controllers\AdController::class, 'getAll'
 Route::post('/news/search', [\App\Http\Controllers\AdController::class, 'search']);
 
 Route::post('checkout', [\App\Http\Controllers\CheckoutController::class, 'store']);
+Route::get('subscriber/all-list', [\App\Http\Controllers\CheckoutController::class, 'allSubcribeUser']);
 
 Route::post('image-uploader', [UploaderController::class, 'imgUploader']);
 Route::post('set-location', [\App\Http\Controllers\LocationController::class, 'store']);

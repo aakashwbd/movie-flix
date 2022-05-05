@@ -28,6 +28,7 @@ return new class extends Migration
             $table->string('type')->nullable();
             $table->string('preference')->nullable();
             $table->string('test')->nullable();
+            $table->enum('status', ['active', 'pending', 'suspend', 'inactive'])->default('active');
             $table->timestamp('email_verified_at')->nullable();
             $table->string('password');
             $table->rememberToken();
