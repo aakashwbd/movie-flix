@@ -40,7 +40,7 @@ class CheckoutController extends Controller
 
     }
 
-    public function getAll(Request $request)
+    public function getAllCheckoutList(Request $request)
     {
         try {
             $checkout = Checkout::query()

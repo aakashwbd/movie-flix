@@ -105,8 +105,11 @@ Route::prefix('admin')->group(function () {
     Route::post('invite-code/get-all', [\App\Http\Controllers\InviteCodeController::class, 'index']);
 
     Route::post('notification/store', [\App\Http\Controllers\NotificationController::class, 'store']);
+    Route::get('notification/get-all', [\App\Http\Controllers\NotificationController::class, 'index']);
+    Route::delete('notification/{id}', [\App\Http\Controllers\NotificationController::class, 'delete']);
 
-    Route::get('package', [\App\Http\Controllers\PackageController::class, 'show']);
+    Route::get('package/list/get-all', [\App\Http\Controllers\PackageController::class, 'show']);
+    Route::get('package/all-list', [\App\Http\Controllers\PackageController::class, 'getAllPackage']);
     Route::get('package/{id}', [\App\Http\Controllers\PackageController::class, 'getSingle']);
     Route::post('package/update', [\App\Http\Controllers\PackageController::class, 'update']);
 
@@ -126,7 +129,8 @@ Route::prefix('admin')->group(function () {
 
     Route::get('/payment', [\App\Http\Controllers\FlashController::class, 'show']);
 
-    Route::get('/check-out/all-list', [\App\Http\Controllers\CheckoutController::class, 'getAll']);
+    Route::get('recent-check-pay-list/list', [\App\Http\Controllers\CheckoutController::class, 'getAllCheckoutList']);
+
 
     Route::post('video/store', [\App\Http\Controllers\VideoController::class, 'store']);
     Route::get('video/get-all', [\App\Http\Controllers\VideoController::class, 'index']);

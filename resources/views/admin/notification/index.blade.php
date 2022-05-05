@@ -9,9 +9,9 @@
             <table class="table table-bordered data-table mt-5">
                 <thead>
                 <tr>
-                    <th>User Name</th>
-                    <th>User Email</th>
-                    <th>Account Created</th>
+                    <th>Title</th>
+                    <th>Description</th>
+                    <th>Created</th>
                     <th>Action</th>
                 </tr>
                 </thead>
@@ -38,20 +38,18 @@
                             </div>
 
                             <div class="form-group my-3">
-                                <select name="package_id" id="" class="form-select">
-                                    <option value="">Select User</option>
-                                    <option value="gold">Gold</option>
-                                    <option value="premium">Premium</option>
+                                <select name="package_id" id="packages" class="form-select">
+
                                 </select>
                             </div>
 
-                            <div class="form-group my-3">
-                                <select name="video_id" id="" class="form-select">
-                                    <option value="" selected>Select Month</option>
-                                    <option value="jan">jan</option>
-                                    <option value="feb">feb</option>
-                                </select>
-                            </div>
+{{--                            <div class="form-group my-3">--}}
+{{--                                <select name="video_id" id="" class="form-select">--}}
+{{--                                    <option value="" selected>Select Month</option>--}}
+{{--                                    <option value="jan">jan</option>--}}
+{{--                                    <option value="feb">feb</option>--}}
+{{--                                </select>--}}
+{{--                            </div>--}}
 
                             <div class="form-group my-3">
                                 <input type="text" name="link" class="form-control " placeholder="External Link">
@@ -69,10 +67,86 @@
 
 @push('custom-js')
     <script>
+
+
+        function notificationDeleteHandler(id) {
+            Swal.fire({
+                title: 'Are you sure?',
+                text: "You won't be able to revert this!",
+                icon: 'warning',
+                showCancelButton: true,
+                confirmButtonColor: '#3085d6',
+                cancelButtonColor: '#d33',
+                confirmButtonText: 'Yes, delete it!'
+            }).then((result) => {
+                if (result.isConfirmed) {
+                    $.ajax({
+                        url: window.origin + '/api/admin/notification/'+id,
+                        type: 'DELETE',
+                        dataType: "json",
+                        success: function (res) {
+                            Swal.fire(
+                                'Deleted!',
+                                'Your file has been deleted.',
+                                'success'
+                            )
+                            setInterval(function () {
+                                location.reload();
+                            }, 1000)
+
+                        },
+                        error: function (xhr, resp, text) {
+                            console.log(xhr);
+                        },
+                    });
+                }
+            })
+        }
+
+        $(document).ready(function (){
+            $.ajax({
+                type: 'get',
+                url: window.origin + '/api/admin/package/all-list',
+                headers: {
+                    "X-CSRF-TOKEN": $('meta[name="csrf-token"]').attr("content"),
+                },
+                success: function (response) {
+                response.data.forEach(item=>{
+                    console.log(item)
+                    $('#packages').append(`
+                        <option value="${item.id}">${item.name}</option>
+
+                    `)
+                })
+                },
+                error: function (xhr, resp, text) {
+                    console.log(xhr, resp)
+                }
+            });
+        })
+
         $('#notificationForm').submit(function (e) {
             e.preventDefault();
             let form = $(this);
-            formSubmit("post", form);
+            let form_data = JSON.stringify(form.serializeJSON());
+            let formData = JSON.parse(form_data);
+            let url = form.attr("action");
+
+            $.ajax({
+                type: 'post',
+                url: url,
+                data: formData,
+                headers: {
+                    "X-CSRF-TOKEN": $('meta[name="csrf-token"]').attr("content"),
+                },
+                success: function (response) {
+                    toastr.success(response.message)
+                    location.reload()
+                },
+                error: function (xhr, resp, text) {
+                    console.log(xhr, resp)
+                }
+            });
         })
 
 
@@ -85,10 +159,10 @@
             var table = $('.data-table').DataTable({
                 processing: true,
                 serverSide: true,
-                ajax: "{{url('api/admin/invite-code/get-all')}}",
+                ajax: "{{url('api/admin/notification/get-all')}}",
                 columns: [
-                    {data: 'name', name: 'name'},
-                    {data: 'email', name: 'email'},
+                    {data: 'title', name: 'title'},
+                    {data: 'description', name: 'description'},
                     {data: 'created_at', name: 'created_at'},
                     {data: 'action', name: 'action', orderable: false, searchable: false},
                 ]

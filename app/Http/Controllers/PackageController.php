@@ -16,12 +16,10 @@ class PackageController extends Controller
             $package->list = $request->list;
             $package->price = $request->price;
 
-
-
             if ($package->update()){
                 return response([
                                     "status" => "success",
-                                    "message" => "Package Save Successfully Done"
+                                    "message" => "Package Update Successfully Done"
                                 ]);
             }
 
@@ -63,7 +61,7 @@ class PackageController extends Controller
 
     public function show (Request $request){
         try {
-            $package = Package::all();
+            $package = Package::query()->latest()->get();
 
             if ($request->ajax()) {
                 return Datatables::of($package)
@@ -82,6 +80,27 @@ class PackageController extends Controller
                                     "status" => "success",
                                     "data" => $package
                                 ]);
+            }
+
+
+        }catch (\Exception $e){
+            return response([
+                                'status' => 'serverError',
+                                'message' => $e->getMessage(),
+                            ], 500);
+        }
+    }
+
+
+    public function getAllPackage (){
+        try {
+            $package = Package::query()->latest()->get();
+
+            if ($package){
+                return response([
+                    "status" => "success",
+                    "data" => $package
+                ]);
             }
 
 

@@ -286,13 +286,13 @@
                 $min = (int)$request->minage;
                 $max = (int)$request->maxage;
 
-                $validator = Validator::make(request()->all(), [
-                    'address' => 'required',
-                ]);
-                if ($validator->fails()) {
-                    $errors = $validator->errors()->messages();
-                    return validateError($errors);
-                }
+//                $validator = Validator::make(request()->all(), [
+//                    'address' => 'required',
+//                ]);
+//                if ($validator->fails()) {
+//                    $errors = $validator->errors()->messages();
+//                    return validateError($errors);
+//                }
 
                 if ($request->address && $min && $max && $request->type && $request->member === 'all' && $request->keyword){
                     $user = User::whereBetween('age', [$min, $max])

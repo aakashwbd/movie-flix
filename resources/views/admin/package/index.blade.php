@@ -6,12 +6,12 @@
 
             <table class="table table-striped table-bordered data-table mt-5">
                 <thead>
-                <tr>
-                    <th>Package Name</th>
-                    <th>Package Price</th>
-                    <th>Package List</th>
-                    <th>Action</th>
-                </tr>
+                    <tr>
+                        <th>Package Name</th>
+                        <th>Package Price</th>
+                        <th>Package List</th>
+                        <th>Action</th>
+                    </tr>
                 </thead>
                 <tbody>
                 </tbody>
@@ -44,12 +44,12 @@
 
                                 <div class="form-group mb-3">
                                     <label for="list" class="form-label">Add list</label>
-                                    <input type="text" class="form-control" name="list[]" id="list">
+                                    <input type="text" class="form-control" name="list[]" id="list2">
                                 </div>
 
                                 <div class="form-group mb-3">
                                     <label for="list" class="form-label">Add list</label>
-                                    <input type="text" class="form-control" name="list[]" id="list">
+                                    <input type="text" class="form-control" name="list[]" id="list3">
                                 </div>
 
                                 <button type="submit" class="btn btn-primary">Save</button>
@@ -70,14 +70,14 @@
 
 @push('custom-js')
     <script>
-        let constant = {
+        let constantData = {
             getPackageUrl: '/api/admin/package',
             getSinglePackageUrl: '/api/admin/package/id',
         }
 
         function packageHandler(id){
             $.ajax({
-                url: window.origin + constant.getSinglePackageUrl.replace('id', id),
+                url: window.origin + constantData.getSinglePackageUrl.replace('id', id),
                 type: 'get',
                 dataType: "json",
                 processData: false,
@@ -86,7 +86,6 @@
                     'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content'),
                 },
                 success: function (res) {
-                    console.log(res)
                     if(res.status === 'success'){
                         $('#package_name').val(res.data.name)
                         $('#package_id').val(res.data.id)
@@ -95,7 +94,7 @@
                         res.data.list.forEach(item=>{
                             $('#list').val(item)
                         })
-                        //
+
                     }
 
 
@@ -104,10 +103,6 @@
                 }
             });
         }
-
-        // $(document).ready(function (){
-
-        // })
 
 
         $(function () {
@@ -121,7 +116,7 @@
             var table = $('.data-table').DataTable({
                 processing: true,
                 serverSide: true,
-                ajax: window.origin + constant.getPackageUrl,
+                ajax: "{{url('api/admin/package/list/get-all')}}",
                 columns: [
                     {data: 'name', name: 'name'},
                     {data: 'price', name: 'price'},
@@ -133,9 +128,41 @@
 
 
         $('#packageForm').submit(function (e) {
+            let token = localStorage.getItem('adminAccess')
             e.preventDefault();
             let form = $(this);
-            formSubmit("post", form);
+
+            let form_data = JSON.stringify(form.serializeJSON());
+            let formData = JSON.parse(form_data)
+
+            let url = form.attr('action');
+
+            $.ajax({
+                type: "post",
+                url: url,
+                data: formData,
+                headers: {
+                    'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content'),
+                    'Authorization': token
+                },
+                success: function (response) {
+                    toastr.success(response.message)
+                    location.reload()
+
+                }, error: function (xhr, resp, text) {
+
+                    if (xhr && xhr.responseJSON) {
+                        let response = xhr.responseJSON;
+                        if (response.status && response.status === 'validate_error') {
+                            $.each(response.message, function (index, message) {
+                                $('.' + message.field).addClass('is-invalid');
+                                $('.' + message.field + '_label').addClass('text-danger');
+                                $('.' + message.field + '_error').html(message.error);
+                            });
+                        }
+                    }
+                }
+            });
         })
     </script>
 @endpush

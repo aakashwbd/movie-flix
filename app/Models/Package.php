@@ -9,7 +9,7 @@ class Package extends Model
 {
     use HasFactory;
 
-    protected $casts=[
-        'list'=>'array'
-        ];
+    protected $casts = [
+        'list' => 'array'
+    ];
 }

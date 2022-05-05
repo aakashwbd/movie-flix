@@ -36,7 +36,7 @@
             var table = $('.payment-table').DataTable({
                 processing: true,
                 serverSide: true,
-                ajax: "{{url('/api/admin/check-out/all-list')}}",
+                ajax: "{{url('api/admin/recent-check-pay-list/list')}}",
                 columns: [
                     {data: 'package', name: 'package'},
                     {data: 'price', name: 'price'},

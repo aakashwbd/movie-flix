@@ -3,7 +3,7 @@
     <div class="container content-config">
         <div id="searchBannerImg">
             <div class="row align-items-center">
-                <div class="col-lg-6 col-sm-12 order-sm-2 order-lg-1 mb-3">
+                <div class="col-lg-4 col-sm-12 order-sm-2 order-lg-1 mb-3">
                     <div class="row">
                         <div class="col-lg-10 col-12 offset-lg-1">
                             <button class="btn btn-primary mb-3" data-bs-target="#placeModal" data-bs-toggle="modal">Place an ad
@@ -11,28 +11,28 @@
                             <h6 class="text-white text-capitalize">filter ads:</h6>
                             <form action="{{url('/api/news/search')}}" id="newsSearchForm">
                                 <div class="row">
-                                    <div class="col-lg-6">
+                                    <div class="col-lg-12">
                                         <input type="text" name="address" class="form-control mb-3" placeholder="Search Location">
                                     </div>
-                                    <div class="col-lg-6">
+                                    <div class="col-lg-12">
                                         <select name="type" class="form-select mb-3">
                                             <option value="all" selected>Who Hosts and/or Visits</option>
                                             <option value="host">Who Hosts</option>
                                             <option value="visit">Who Visits</option>
                                         </select>
                                     </div>
-                                    <div class="col-lg-6">
+                                    <div class="col-lg-12">
                                         <div class="d-flex align-items-center justify-content-center mb-3">
                                             <input type="text" class="form-control" name="minage" placeholder="10">
                                             <label class="text-capitalize mx-3 text-white">to</label>
                                             <input type="text" class="form-control" name="maxage" placeholder="49">
                                         </div>
                                     </div>
-                                    <div class="col-lg-6">
+                                    <div class="col-lg-12">
                                         <input type="text" name="keyword" class="form-control mb-3" placeholder="keyword">
                                     </div>
 
-                                    <div class="col-lg-6">
+                                    <div class="col-lg-12">
                                         <select name="member" class="form-select mb-3">
                                             <option value="closest" selected>The Closest</option>
                                             <option value="online">Online Members</option>
@@ -46,7 +46,7 @@
                     </div>
                 </div>
 
-                <div class="col-lg-6 col-sm-12 order-sm-1 order-lg-2 mb-3">
+                <div class="col-lg-8 col-sm-12 order-sm-1 order-lg-2 mb-3">
                     <img class="bannerImg"
                          src=""
                          alt="">
